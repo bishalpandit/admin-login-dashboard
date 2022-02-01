@@ -90,7 +90,6 @@ const UserForm = () => {
         emailErr: ""
     })
 
-    console.log(form);
     const userCreate = useSelector(state => state.userCreate)
 
     const { success, error, loading } = userCreate

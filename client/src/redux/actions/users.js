@@ -28,11 +28,13 @@ export const listUsers = () => async (dispatch, getState) => {
 
     } catch (error) {
 
-        if(error.includes('invalid token')) {
-            dispatch(adminLogout())
-            return;
+        if(error.response.status === 403) {
+            dispatch({
+                type: 'SESSION_EXPIRED'
+            })
         }
-
+        console.log(error);
+        
         dispatch({
             type: 'USERLIST_FAIL',
             payload:
@@ -80,6 +82,11 @@ export const createUser = ({ username, email, address, mobile }) => async (dispa
 
     } catch (error) {
 
+        if(error.response.status === 403) {
+            dispatch({
+                type: 'SESSION_EXPIRED'
+            })
+        }
 
         dispatch({
             type: 'USER_CREATE_FAIL',
@@ -133,6 +140,13 @@ export const deleteUser = (id) => async (dispatch) => {
 
     } catch (error) {
 
+        if(error.response.status === 403) {
+            dispatch({
+                type: 'SESSION_EXPIRED'
+            })
+        }
+
+        console.log(error.response.status);
         dispatch({
             type: 'USER_DELETE_FAIL',
             payload:

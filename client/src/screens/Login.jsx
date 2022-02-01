@@ -10,7 +10,7 @@ const Login = () => {
     const history = useHistory()
     
     const admin = useSelector(state => state.admin)
-    const { loading, error } = admin
+    const { loading, error, sessionExpired } = admin
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -30,6 +30,7 @@ const Login = () => {
 
     return (
         <Container component="main" maxWidth="xs">
+            {sessionExpired && <Alert onClose={() => { dispatch({ type: 'SESSION_RESET' }) }} severity='warning'>Session Expired</Alert>}
             {error && <Alert severity='error'>Invalid Email or Password</Alert>}
             {loading ? (
                 <div className="h-[100vh] flex flex-col justify-center w-2/4 mx-auto " >

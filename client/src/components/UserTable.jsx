@@ -16,9 +16,8 @@ const UserTable = () => {
 
 
     useEffect(() => {
-        if(userList.users?.length === 0)
         dispatch(listUsers())
-    }, [dispatch, userList.users])
+    }, [dispatch])
 
     const deleteHandler = (id) => {
         dispatch(deleteUser(id))
