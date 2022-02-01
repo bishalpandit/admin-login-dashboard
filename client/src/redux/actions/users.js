@@ -80,9 +80,6 @@ export const createUser = ({ username, email, address, mobile }) => async (dispa
 
     } catch (error) {
 
-        if(error.includes('invalid token')) {
-            dispatch(adminLogout())
-        }
 
         dispatch({
             type: 'USER_CREATE_FAIL',
