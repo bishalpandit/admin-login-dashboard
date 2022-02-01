@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { listUsers, deleteUser } from '../redux/actions/users';
 import { useSelector, useDispatch } from 'react-redux'
-import { Alert, LinearProgress } from '@mui/material';
+import { Alert, CircularProgress, LinearProgress } from '@mui/material';
 
 
 
@@ -27,7 +27,7 @@ const UserTable = () => {
         <div>
             {success && (<Alert severity='error'>User Deleted!</Alert>)}
             {
-                loading ? (<LinearProgress />) :
+                loading ? (<CircularProgress />) :
                     error ? (<Alert severity='error'>Something went wrong!</Alert>) :
 
                         (
