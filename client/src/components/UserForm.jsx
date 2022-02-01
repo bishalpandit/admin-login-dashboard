@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const validateUsername = (username) => {
 
-    if(username === "") {
+    if (username === "") {
         return "Enter Username"
     }
     for (let i = 0; i < username.length; i++) {
@@ -30,11 +30,11 @@ const validateUsername = (username) => {
 
 const validateMobile = (mob) => {
 
-    if(mob === "") {
+    if (mob === "") {
         return "Enter Mobile"
     }
 
-    if (mob.length !== 9)
+    if (mob.length !== 10)
         return "Only 10 digits"
 
     for (let i = 0; i < mob.length; i++) {
@@ -53,7 +53,7 @@ const validateMobile = (mob) => {
 
 const validateEmail = (email) => {
 
-    if(email === "") {
+    if (email === "") {
         return "Enter Email"
     }
 
@@ -117,7 +117,7 @@ const UserForm = () => {
             address: data.get('address')
 
         }
-        if(form.usernameErr === "" && form.mobileErr === "" && form.emailErr === "") {
+        if (form.usernameErr === "" && form.mobileErr === "" && form.emailErr === "") {
             dispatch(createUser(userData))
         }
     }
@@ -146,7 +146,10 @@ const UserForm = () => {
                             </Typography>
                             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                                 <TextField
-                                    onChange={(e) => setForm((prevForm) => { return { ...prevForm, username: e.target.value, usernameErr: validateUsername(prevForm.username) }; })}
+                                    onChange={(e) => {
+                                        setForm((prevForm) => { return { ...prevForm, username: e.target.value }; })
+                                        setForm((prevForm) => { return { ...prevForm, usernameErr: validateUsername(prevForm.username) }; })
+                                    }}
                                     margin="normal"
                                     required
                                     fullWidth
@@ -161,7 +164,10 @@ const UserForm = () => {
                                     form.usernameErr && (<Alert severity='warning'>{form.usernameErr}</Alert>)
                                 }
                                 <TextField
-                                    onChange={(e) => setForm((prevForm) => { return { ...prevForm, mobile: e.target.value,  mobileErr: validateMobile(prevForm.mobile) } })}
+                                    onChange={(e) => {
+                                        setForm((prevForm) => { return { ...prevForm, mobile: e.target.value } })
+                                        setForm((prevForm) => { return { ...prevForm, mobileErr: validateMobile(prevForm.mobile) } })
+                                    }}
                                     margin="normal"
                                     required
                                     fullWidth
@@ -175,7 +181,10 @@ const UserForm = () => {
                                     form.mobileErr && (<Alert severity='warning'>{form.mobileErr}</Alert>)
                                 }
                                 <TextField
-                                    onChange={(e) => setForm((prevForm) => { return { ...prevForm, email: e.target.value, emailErr: validateEmail(prevForm.email) } })}
+                                    onChange={(e) => {
+                                        setForm((prevForm) => { return { ...prevForm, email: e.target.value } })
+                                        setForm((prevForm) => { return { ...prevForm, emailErr: validateEmail(prevForm.email) } })
+                                    }}
                                     margin="normal"
                                     required
                                     fullWidth
