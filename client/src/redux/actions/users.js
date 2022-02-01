@@ -82,7 +82,6 @@ export const createUser = ({ username, email, address, mobile }) => async (dispa
 
         if(error.includes('invalid token')) {
             dispatch(adminLogout())
-            return;
         }
 
         dispatch({

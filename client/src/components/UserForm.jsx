@@ -1,11 +1,96 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, TextField, Box, Typography, Container, Alert, CircularProgress } from '@mui/material'
 import { createUser } from '../redux/actions/users';
 import { useDispatch, useSelector } from 'react-redux';
 
+const validateUsername = (username) => {
+
+    if(username === "") {
+        return "Enter Username"
+    }
+    for (let i = 0; i < username.length; i++) {
+
+        let ch = username.charCodeAt(i)
+
+        if (ch === 32) // Space
+            return "No spaces allowed!"
+
+        // Check for alphanumeric values
+        if ((ch >= 48 && ch <= 57) || (ch >= 65 && ch <= 90) || (ch >= 97 && ch <= 122)) {
+            continue;
+        }
+
+        return "Only alphanumeric values"
+    }
+
+    return ""
+}
+
+
+
+const validateMobile = (mob) => {
+
+    if(mob === "") {
+        return "Enter Mobile"
+    }
+
+    if (mob.length !== 9)
+        return "Only 10 digits"
+
+    for (let i = 0; i < mob.length; i++) {
+
+        let ch = mob.charCodeAt(i);
+
+        if (ch >= 48 && ch <= 57) {
+            continue;
+        }
+        else
+            return "Enter digits only"
+    }
+
+    return ""
+}
+
+const validateEmail = (email) => {
+
+    if(email === "") {
+        return "Enter Email"
+    }
+
+    if (!email.includes("@")) {
+        return "Invalid Email"
+    }
+
+    let idx;
+
+    for (let i = 0; i < email.length; i++) {
+        if (email[i] === '@') {
+            idx = i;
+            break;
+        }
+    }
+
+    const remStringAfterAt = email.substr(idx)
+
+    if (!remStringAfterAt.includes("."))
+        return "Invalid Email"
+
+    return ""
+}
+
 const UserForm = () => {
     const dispatch = useDispatch()
+    const [form, setForm] = useState({
+        username: "",
+        mobile: "",
+        email: "",
+        address: "",
+        usernameErr: "",
+        mobileErr: "",
+        emailErr: ""
+    })
 
+    console.log(form);
     const userCreate = useSelector(state => state.userCreate)
 
     const { success, error, loading } = userCreate
@@ -13,6 +98,15 @@ const UserForm = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+
+        // setForm((prevForm) => {
+        //     return {
+        //         ...prevForm,
+        //         usernameErr: validateUsername(prevForm.username),
+        //         mobileErr: validateMobile(prevForm.mobile),
+        //         emailErr: validateEmail(prevForm.email),
+        //     }
+        // })
 
         const data = new FormData(event.currentTarget);
 
@@ -23,7 +117,9 @@ const UserForm = () => {
             address: data.get('address')
 
         }
-        dispatch(createUser(userData))
+        if(form.usernameErr === "" && form.mobileErr === "" && form.emailErr === "") {
+            dispatch(createUser(userData))
+        }
     }
 
     return (
@@ -50,6 +146,7 @@ const UserForm = () => {
                             </Typography>
                             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                                 <TextField
+                                    onChange={(e) => setForm((prevForm) => { return { ...prevForm, username: e.target.value, usernameErr: validateUsername(prevForm.username) }; })}
                                     margin="normal"
                                     required
                                     fullWidth
@@ -60,7 +157,11 @@ const UserForm = () => {
                                     autoComplete="username"
                                     autoFocus
                                 />
+                                {
+                                    form.usernameErr && (<Alert severity='warning'>{form.usernameErr}</Alert>)
+                                }
                                 <TextField
+                                    onChange={(e) => setForm((prevForm) => { return { ...prevForm, mobile: e.target.value,  mobileErr: validateMobile(prevForm.mobile) } })}
                                     margin="normal"
                                     required
                                     fullWidth
@@ -70,7 +171,11 @@ const UserForm = () => {
                                     id="mobile"
                                     autoComplete="mobile-number"
                                 />
+                                {
+                                    form.mobileErr && (<Alert severity='warning'>{form.mobileErr}</Alert>)
+                                }
                                 <TextField
+                                    onChange={(e) => setForm((prevForm) => { return { ...prevForm, email: e.target.value, emailErr: validateEmail(prevForm.email) } })}
                                     margin="normal"
                                     required
                                     fullWidth
@@ -80,7 +185,11 @@ const UserForm = () => {
                                     id="email"
                                     autoComplete="email"
                                 />
+                                {
+                                    form.emailErr && (<Alert severity='warning'>{form.emailErr}</Alert>)
+                                }
                                 <TextField
+                                    onChange={(e) => setForm((prevForm) => { return { ...prevForm, address: e.target.value } })}
                                     margin="normal"
                                     required
                                     fullWidth
