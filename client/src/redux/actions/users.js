@@ -28,7 +28,7 @@ export const listUsers = () => async (dispatch, getState) => {
 
     } catch (error) {
 
-        if(error.response.status === 403) {
+        if(error.response.status === 403 || error.response.status === 400) {
             dispatch({
                 type: 'SESSION_EXPIRED'
             })
@@ -82,7 +82,7 @@ export const createUser = ({ username, email, address, mobile }) => async (dispa
 
     } catch (error) {
 
-        if(error.response.status === 403) {
+        if(error.response.status === 403 || error.response.status === 400) {
             dispatch({
                 type: 'SESSION_EXPIRED'
             })
@@ -140,13 +140,13 @@ export const deleteUser = (id) => async (dispatch) => {
 
     } catch (error) {
 
-        if(error.response.status === 403) {
+        if(error.response.status === 403 || error.response.status === 400) {
             dispatch({
                 type: 'SESSION_EXPIRED'
             })
         }
 
-        console.log(error.response.status);
+        //console.log(error.response.status);
         dispatch({
             type: 'USER_DELETE_FAIL',
             payload:

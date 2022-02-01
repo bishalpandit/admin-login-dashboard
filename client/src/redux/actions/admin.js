@@ -17,7 +17,7 @@ export const adminLogin = ({ email, password }) => async (dispatch) => {
             { email, password },
             config
         )
-        console.log(data);
+        //console.log(data);
         dispatch({
             type: 'ADMIN_LOGIN_SUCCESS',
             payload: data,
